@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import ContentForm
 from barcode import EAN13
 from barcode.writer import ImageWriter
-from barcode.ean import IllegalCharacterError
+from barcode.ean import IllegalCharacterError, NumberOfDigitsError
 import pyqrcode
 import png
 
@@ -27,8 +27,8 @@ def generate_bar_view(request):
             #Generate Bar Code
             barcode = EAN13(content_data)
             barcode_img = EAN13(content_data, writer=ImageWriter())   
-            generated_barcode_svg = barcode.save("app/static/app/bar")
-            generated_barcode_png = barcode_img.save("app/static/app/bar")
+            barcode.save("app/static/app/bar")
+            barcode_img.save("app/static/app/bar")
             
             
             return redirect('/bar-generated')
@@ -42,6 +42,12 @@ def generate_bar_view(request):
         error = "EAN code can only contain numbers."
         context = {'form':form, 'error': error}
         return render(request, template_name, context)
+    except NumberOfDigitsError:
+        template_name = 'app/bar-home.html'
+        error = "EAN must have 12 digits, not " + len(content_data)
+        context = {'form':form, 'error': error}
+        return render(request, template_name, context)
+    
 
 
 
@@ -65,8 +71,8 @@ def generate_qr_view(request):
         
         # Generate QR code
         qrcode = pyqrcode.create(content_data)
-        generated_qr_svg = qrcode.svg("app/static/app/qr.svg", scale = 8)        
-        generated_qr_png  = qrcode.png('app/static/app/qr.png', scale = 6)
+        qrcode.svg("app/static/app/qr.svg", scale = 8)        
+        qrcode.png('app/static/app/qr.png', scale = 6)
         
         
         return redirect('/qr-generated')

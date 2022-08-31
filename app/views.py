@@ -44,7 +44,8 @@ def generate_bar_view(request):
         return render(request, template_name, context)
     except NumberOfDigitsError:
         template_name = 'app/bar-home.html'
-        error = "EAN must have 12 digits, not " + len(content_data)
+        content_length = str(len(content_data))
+        error = "EAN must have 12 digits, not " + content_length
         context = {'form':form, 'error': error}
         return render(request, template_name, context)
     

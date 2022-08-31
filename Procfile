@@ -1,1 +1,1 @@
-web: gunicorn barcode-qrcode-generator.wsgi
+web gunicorn barcode_qrcode_generator.wsgi

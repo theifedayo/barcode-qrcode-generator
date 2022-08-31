@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+
+
+{% block content%}
+{% load static %}
+<br>
+<br>
+<br>
+<br>
+            <div class="container">
+                <center>
+                    <div class="">
+                        <img src="{% static 'app/qr.svg' %}"/>
+                        <small>SVG format</small>
+                    </div>
+                    
+                    <div class="">
+                        <img src="{% static 'app/qr.png' %}"/>
+                        <small>PNG format</small>
+                    </div>
+                </center>
+                
+            </div> 
+
+
+
+{% endblock %}
